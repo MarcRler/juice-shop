@@ -100,9 +100,9 @@
 
     <mat-menu #menu="matMenu" [overlapTrigger]="true">
       <mat-radio-button (click)="changeLanguage(language.key)" *ngFor="let language of languages" [value]="language"
-                        class="mat-menu-item" style="width: 240px;" checked="{{selectedLanguage === language}}"
+                        class="mat-menu-item" style="width: 240px; padding-right: 8px;" checked="{{selectedLanguage === language}}"
                         aria-label="{{language.lang}}">
-        <div style="display: inline-block; width: 200px; margin-left: 5px;">
+        <div style="display: inline-block; width: 190px; margin-left: 5px;">
           <span *ngFor="let icon of language.icons" [class]="'flag-icon flag-icon-' + icon"></span>
           {{language?.lang}}
         </div>
