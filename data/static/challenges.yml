@@ -62,6 +62,9 @@
   hint: 'The feature you need to exploit for this challenge is not directly advertised anywhere.'
   hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/insecure-deserialization.html#perform-a-remote-code-execution-that-would-keep-a-less-hardened-application-busy-forever'
   key: rceChallenge
+  disabledEnv:
+    - Docker
+    - Heroku
 -
   name: 'CAPTCHA Bypass'
   category: 'Broken Anti Automation'
@@ -119,6 +122,14 @@
   hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/xss.html#perform-a-dom-xss-attack'
   key: localXssChallenge
 -
+  name: 'Database Schema'
+  category: 'Injection'
+  description: 'Exfiltrate the entire DB schema definition via SQL Injection.'
+  difficulty: 3
+  hint: 'Find out where this information could come from. Then craft a UNION SELECT attack string against an endpoint that offers an unnecessary way to filter data.'
+  hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/injection.html#exfiltrate-the-entire-db-schema-definition-via-sql-injection'
+  key: dbSchemaChallenge
+-
   name: 'Deprecated Interface'
   category: 'Security Misconfiguration'
   description: 'Use a deprecated B2B interface that was not properly shut down.'
@@ -143,6 +154,14 @@
   hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/sensitive-data-exposure.html#perform-an-unwanted-information-disclosure-by-accessing-data-cross-domain'
   key: emailLeakChallenge
 -
+  name: 'Ephemeral Accountant'
+  category: 'Injection'
+  description: 'Log in with the (non-existing) accountant <i>acc0unt4nt@juice-sh.op</i> without ever registering that user.'
+  difficulty: 4
+  hint: 'Try to create the needed user "out of thin air".'
+  hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/injection.html#log-in-with-the-non-existing-accountant-without-ever-registering-that-user'
+  key: ephemeralAccountantChallenge
+-
   name: 'Error Handling'
   category: 'Security Misconfiguration'
   description: 'Provoke an error that is neither very gracefully nor consistently handled.'
@@ -156,7 +175,7 @@
   description: 'Successfully redeem an expired campaign coupon code.'
   difficulty: 4
   hint: 'Try to identify past special event or holiday campaigns of the shop first.'
-  # hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/improper-input-validation.html#successfully-redeem-an-expired-campaign-coupon-code'
+  hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/improper-input-validation.html#successfully-redeem-an-expired-campaign-coupon-code'
   key: manipulateClockChallenge
 -
   name: 'Extra Language'
@@ -244,7 +263,7 @@
   description: 'Steal someone else''s personal data without using Injection.'
   difficulty: 4
   hint: 'Trick the regular Data Export to give you more than actually belongs to you.'
-  # hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/sensitive-data-exposure.html#steal-someone-elses-personal-data-without-using-injection'
+  hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/sensitive-data-exposure.html#steal-someone-elses-personal-data-without-using-injection'
   key: dataExportChallenge
 -
   name: 'HTTP-Header XSS'
@@ -268,7 +287,7 @@
   description: 'Dumpster dive the Internet for a leaked password and log in to the original user account it belongs to. (Creating a new account with the same password does not qualify as a solution.)'
   difficulty: 5
   hint: 'Once you have it, a technique called "Password Spraying" might prove useful.'
-  # hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/sensitive-data-exposure.html#dumpster-dive-the-internet-for-a-leaked-password-and-log-in-to-the-original-user-account-it-belongs-to'
+  hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/sensitive-data-exposure.html#dumpster-dive-the-internet-for-a-leaked-password-and-log-in-to-the-original-user-account-it-belongs-to'
   key: dlpPasswordSprayingChallenge
 -
   name: 'Leaked Unsafe Product'
@@ -276,7 +295,7 @@
   description: 'Identify an unsafe product that was removed from the shop and <a href="/#/contact">inform the shop</a> which ingredients are dangerous.'
   difficulty: 4
   hint: 'Your own SQLi and someone else''s Ctrl-V will be your accomplices in this challenge!'
-  # hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/sensitive-data-exposure.html#identify-an-unsafe-product-that-was-removed-from-the-shop-and-inform-the-shop-which-ingredients-are-dangerous'
+  hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/sensitive-data-exposure.html#identify-an-unsafe-product-that-was-removed-from-the-shop-and-inform-the-shop-which-ingredients-are-dangerous'
   key: dlpPastebinDataLeakChallenge
 -
   name: 'Legacy Typosquatting'
@@ -396,7 +415,7 @@
   description: 'All your orders are belong to us! Even the ones which don''t.'
   difficulty: 5
   hint: 'Take a close look on how the $where query operator works in MongoDB.'
-  # hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/injection.html#all-your-orders-are-belong-to-us'
+  hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/injection.html#all-your-orders-are-belong-to-us'
   key: noSqlOrdersChallenge
 -
   name: 'NoSQL Manipulation'
@@ -523,16 +542,16 @@
   category: 'Broken Access Control'
   description: 'Request a hidden resource on server through server.'
   difficulty: 6
-  hint: 'Reverse the Bad and it gets Good again.'
-  # hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/broken-access-control.html#request-a-hidden-resource-on-server-through-server'
+  hint: 'Reverse engineering something bad can make good things happen.'
+  hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/broken-access-control.html#request-a-hidden-resource-on-server-through-server'
   key: ssrfChallenge
 -
   name: 'SSTi'
   category: 'Injection'
   description: 'Infect the server with juicy malware by abusing arbitrary command execution.'
   difficulty: 6
-  hint: 'The search for a personal identity is the life of a man.'
-  # hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/injection.html#infect-the-server-with-malware-by-abusing-arbitrary-command-execution'
+  hint: '"SSTi" is a clear indicator that this has nothing to do with anything Angular. Also, make sure to use only our non-malicious malware.'
+  hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/injection.html#infect-the-server-with-juicy-malware-by-abusing-arbitrary-command-execution'
   key: sstiChallenge
   disabledEnv:
     - Docker
@@ -577,6 +596,9 @@
   hint: 'Your attack payload must not trigger the protection against too many iterations.'
   hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/insecure-deserialization.html#perform-a-remote-code-execution-that-occupies-the-server-for-a-while-without-using-infinite-loops'
   key: rceOccupyChallenge
+  disabledEnv:
+    - Docker
+    - Heroku
 -
   name: 'Supply Chain Attack'
   category: 'Vulnerable Components'
@@ -591,7 +613,7 @@
   description: 'Solve the 2FA challenge for user "wurstbrot". (Disabling, bypassing or overwriting his 2FA settings does not count as a solution)'
   difficulty: 5
   hint: 'The 2FA implementation requires to store a secret for every user. You will need to find a way to access this secret in order to solve this challenge.'
-  # hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/broken-authentication.html#solve-the-2fa-challenge-for-user-wurstbrot'
+  hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/broken-authentication.html#solve-the-2fa-challenge-for-user-wurstbrot'
   key: twoFactorAuthUnsafeSecretStorageChallenge
 -
   name: 'Unsigned JWT'
@@ -622,7 +644,7 @@
   category: 'Injection'
   description: 'Retrieve a list of all user credentials via SQL Injection.'
   difficulty: 4
-  hint: 'Craft a UNION SELECT attack string against an endpoint that offers an unnecessary way to filter data.'
+  hint: 'Gather information on where user data is stored and how it is addressed. Then craft a corresponding UNION SELECT attack.'
   hintUrl: 'https://bkimminich.gitbooks.io/pwning-owasp-juice-shop/content/v/develop/part2/injection.html#retrieve-a-list-of-all-user-credentials-via-sql-injection'
   key: unionSqlInjectionChallenge
 -

@@ -42,8 +42,8 @@ exports.promotionVideo = () => {
     fs.readFile('views/promotionVideo.pug', function (err, buf) {
       if (err) throw err
       let template = buf.toString()
-      let subs = getSubsFromFile()
-      if (utils.contains(subs, `</script><script>alert(\`xss\`)</script>`)) {
+      const subs = getSubsFromFile()
+      if (utils.contains(subs, '</script><script>alert(`xss`)</script>')) {
         if (utils.notSolved(challenges.videoXssChallenge)) {
           utils.solve(challenges.videoXssChallenge)
         }
@@ -58,7 +58,7 @@ exports.promotionVideo = () => {
       template = template.replace(/_primDark_/g, theme.primDark)
       const fn = pug.compile(template)
       let compiledTemplate = fn()
-      compiledTemplate = compiledTemplate.replace(`<script id="subtitle"></script>`, `<script id="subtitle" type="text/vtt" data-label="English" data-lang="en">` + subs + `</script>`)
+      compiledTemplate = compiledTemplate.replace('<script id="subtitle"></script>', '<script id="subtitle" type="text/vtt" data-label="English" data-lang="en">' + subs + '</script>')
       res.send(compiledTemplate)
     })
   }

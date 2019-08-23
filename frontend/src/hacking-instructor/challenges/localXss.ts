@@ -53,12 +53,12 @@ export const DomXssInstruction: ChallengeInstruction = {
     },
     {
       text: "Hmm, this doesn't look normal, does it?",
-      fixture: 'app-search-result',
+      fixture: '.noResult',
       resolved: waitInMs(8000)
     },
     {
       text: 'If you right-click on the search term and inspect that part of the page with your browser, you will see that our `h1`-tag was _actually_ embedded into the page and is not just shown as plain text!',
-      fixture: 'app-search-result',
+      fixture: '.noResult',
       resolved: waitInMs(16000)
     },
     {
@@ -73,11 +73,11 @@ export const DomXssInstruction: ChallengeInstruction = {
     },
     {
       text: "😔 This didn't work as we hoped. If you inspect the page, you should see the `script`-tag but it is not executed for some reason.",
-      fixture: 'app-search-result',
+      fixture: '.noResult',
       resolved: waitInMs(10000)
     },
     {
-      text: "Luckily there are _many_ different XSS payloads we can try. Let's try this one next: `<iframe src=\"javascript:alert(\`xss\`)\">`.",
+      text: "Luckily there are _many_ different XSS payloads we can try. Let's try this one next: <code>&lt;iframe src=\"javascript:alert(&#96;xss&#96;)\"&gt;&lt;/iframe&gt;</code>.",
       fixture: '#searchQuery',
       resolved: waitForInputToHaveValue('#searchQuery input', '<iframe src="javascript:alert(`xss`)">')
     },
@@ -89,13 +89,13 @@ export const DomXssInstruction: ChallengeInstruction = {
     {
       text:
         '🎉 Congratulations! You just successfully performed an XSS attack!',
-      fixture: 'app-search-result',
+      fixture: '.noResult',
       resolved: waitInMs(8000)
     },
     {
       text:
-        'More precisely, this was a **DOM XSS** attack, because your payload was handled and improperly embedded into the page by the application frountend code without ever sending it to the server.',
-      fixture: 'app-search-result',
+        'More precisely, this was a **DOM XSS** attack, because your payload was handled and improperly embedded into the page by the application frontend code without ever sending it to the server.',
+      fixture: '.noResult',
       resolved: waitInMs(16000)
     }
   ]

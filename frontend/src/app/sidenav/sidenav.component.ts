@@ -53,8 +53,10 @@ export class SidenavComponent implements OnInit {
       }
     })
     this.ngZone.runOutsideAngular(() => {
-      this.io.socket().on('challenge solved', () => {
-        this.getScoreBoardStatus()
+      this.io.socket().on('challenge solved', (challenge) => {
+        if (challenge.key === 'scoreBoardChallenge') {
+          this.scoreBoardVisible = true
+        }
       })
     })
   }
@@ -66,7 +68,7 @@ export class SidenavComponent implements OnInit {
   logout () {
     this.userService.saveLastLoginIp().subscribe((user: any) => { this.noop() }, (err) => console.log(err))
     localStorage.removeItem('token')
-    this.cookieService.remove('token', { domain: document.domain })
+    this.cookieService.remove('token')
     sessionStorage.removeItem('bid')
     this.userService.isLoggedIn.next(false)
     this.router.navigate(['/'])

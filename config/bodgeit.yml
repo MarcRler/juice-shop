@@ -2,10 +2,11 @@ application:
   domain: thebodgeitstore.com
   name: 'The BodgeIt Store'
   logo: 'http://www.userlogos.org/files/logos/inductiveload/Google%20Code.png'
+  deluxePage:
+    deluxeDeliveryImage: 'delivery_bodgeit.png'
   favicon: 'https://www.shareicon.net/download/2016/08/13/808555_media.ico'
   theme: indigo-pink
   showGitHubLinks: true
-  showWelcomeBanner: false
   twitterUrl: null
   facebookUrl: null
   slackUrl: null
@@ -17,6 +18,8 @@ application:
     topProductImage: undefined.png
     bottomProductImage: thingie1.jpg
   altcoinName: Bodgecoin
+  welcomeBanner:
+    showOnFirstStart: false
   cookieConsent:
     backgroundColor: '#000000'
     textColor: '#ffffff'

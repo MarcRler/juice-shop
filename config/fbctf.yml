@@ -1,11 +1,14 @@
 application:
   logo: JuiceShopCTF_Logo.png
+  deluxePage:
+    deluxeDeliveryImage: 'delivery_ctf.png'  
   favicon: favicon_ctf.ico
   showChallengeHints: false
   showVersionNumber: false
   showHackingInstructor: false
   showGitHubLinks: false
-  showWelcomeBanner: false
+  welcomeBanner:
+    showOnFirstStart: false
 ctf:
   showFlagsInNotifications: true
   showCountryDetailsInNotifications: both
@@ -268,3 +271,9 @@ ctf:
     ghostLoginChallenge:
       name: Taiwan
       code: TW
+    dbSchemaChallenge:
+      name: Brunei
+      code: BN
+    ephemeralAccountantChallenge:
+      name: Denmark
+      code: DK
