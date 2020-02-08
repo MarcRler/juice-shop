@@ -1,12 +1,12 @@
 const fs = require('fs')
-const jade = require('jade')
+const pug = require('pug')
 const config = require('config')
 const challenges = require('../data/datacache').challenges
 const utils = require('../lib/utils')
 const themes = require('../views/themes/themes').themes
 
 exports.getVideo = () => {
-  return (req, res, next) => {
+  return (req, res) => {
     const path = videoPath()
     const stat = fs.statSync(path)
     const fileSize = stat.size
@@ -38,42 +38,39 @@ exports.getVideo = () => {
 }
 
 exports.promotionVideo = () => {
-  return (req, res, next) => {
-    fs.readFile('views/promotionVideo.jade', function (err, buf) {
+  return (req, res) => {
+    fs.readFile('views/promotionVideo.pug', function (err, buf) {
       if (err) throw err
-      let jadeTemplate = buf.toString()
-      let subs = getSubsFromFile()
-      if (utils.contains(subs, `</script><script>alert(\`xss\`)</script>`)) {
+      let template = buf.toString()
+      const subs = getSubsFromFile()
+      if (utils.contains(subs, '</script><script>alert(`xss`)</script>')) {
         if (utils.notSolved(challenges.videoXssChallenge)) {
           utils.solve(challenges.videoXssChallenge)
         }
       }
       const theme = themes[config.get('application.theme')]
-      jadeTemplate = jadeTemplate.replace(/_title_/g, config.get('application.name'))
-      jadeTemplate = jadeTemplate.replace(/_favicon_/g, favicon())
-      jadeTemplate = jadeTemplate.replace(/_bgColor_/g, theme.bgColor)
-      jadeTemplate = jadeTemplate.replace(/_textColor_/g, theme.textColor)
-      jadeTemplate = jadeTemplate.replace(/_navColor_/g, theme.navColor)
-      const fn = jade.compile(jadeTemplate)
-      let compiledJade = fn()
-      compiledJade = compiledJade.replace(`<script id="subtitle"></script>`, `<script id="subtitle" type="text/vtt" data-label="English" data-lang="en">` + subs + `</script>`)
-      res.send(compiledJade)
+      template = template.replace(/_title_/g, config.get('application.name'))
+      template = template.replace(/_favicon_/g, favicon())
+      template = template.replace(/_bgColor_/g, theme.bgColor)
+      template = template.replace(/_textColor_/g, theme.textColor)
+      template = template.replace(/_navColor_/g, theme.navColor)
+      template = template.replace(/_primLight_/g, theme.primLight)
+      template = template.replace(/_primDark_/g, theme.primDark)
+      const fn = pug.compile(template)
+      let compiledTemplate = fn()
+      compiledTemplate = compiledTemplate.replace('<script id="subtitle"></script>', '<script id="subtitle" type="text/vtt" data-label="English" data-lang="en">' + subs + '</script>')
+      res.send(compiledTemplate)
     })
   }
   function favicon () {
-    let icon = config.get('application.favicon')
-    icon = decodeURIComponent(icon.substring(icon.lastIndexOf('/') + 1))
-    return icon
+    return utils.extractFilename(config.get('application.favicon'))
   }
 }
 
 function getSubsFromFile () {
   let subtitles = 'JuiceShopJingle.vtt'
   if (config && config.application && config.application.promotion && config.application.promotion.subtitles !== null) {
-    subtitles = config.application.promotion.subtitles
-    if (subtitles.substring(0, 4) === 'http') {
-      subtitles = decodeURIComponent(subtitles.substring(subtitles.lastIndexOf('/') + 1))
-    }
+    subtitles = utils.extractFilename(config.application.promotion.subtitles)
   }
   const data = fs.readFileSync('frontend/dist/frontend/assets/public/videos/' + subtitles, 'utf8')
   return data.toString()
@@ -81,11 +78,7 @@ function getSubsFromFile () {
 
 function videoPath () {
   if (config && config.application && config.application.promotion && config.application.promotion.video !== null) {
-    let video = config.application.promotion.video
-
-    if (video.substring(0, 4) === 'http') {
-      video = decodeURIComponent(video.substring(video.lastIndexOf('/') + 1))
-    }
+    const video = utils.extractFilename(config.application.promotion.video)
     return 'frontend/src/assets/public/videos/' + video
   }
   return 'frontend/src/assets/public/videos/JuiceShopJingle.mp4'

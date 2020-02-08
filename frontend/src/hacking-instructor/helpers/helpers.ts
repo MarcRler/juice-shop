@@ -45,7 +45,7 @@ export function waitForInputToNotBeEmpty (inputSelector: string) {
     ) as HTMLInputElement
 
     while (true) {
-      if (inputElement.value !== undefined && inputElement.value !== null && inputElement.value !== '') {
+      if (inputElement.value && inputElement.value !== '') {
         break
       }
       await sleep(100)
@@ -58,8 +58,8 @@ export function waitForElementToGetClicked (elementSelector: string) {
     const element = document.querySelector(
       elementSelector
     ) as HTMLElement
-    if (element === null) {
-      console.warn(`Element with selector "${elementSelector}" is null`)
+    if (!element) {
+      console.warn(`Could not find Element with selector "${elementSelector}"`)
     }
 
     await new Promise((resolve) => {
@@ -68,9 +68,32 @@ export function waitForElementToGetClicked (elementSelector: string) {
   }
 }
 
-/**
- * Returns a function that waits for the specified time in milli seconds
- */
+export function waitForElementsInnerHtmlToBe (elementSelector: string, value: String) {
+  return async () => {
+    while (true) {
+      const element = document.querySelector(
+        elementSelector
+      ) as HTMLElement
+
+      if (element && element.innerHTML === value) {
+        break
+      }
+      await sleep(100)
+    }
+  }
+}
+
 export function waitInMs (timeInMs: number) {
   return () => sleep(timeInMs)
+}
+
+export function waitForAngularRouteToBeVisited (route: String) {
+  return async () => {
+    while (true) {
+      if (window.location.hash === `#/${route}`) {
+        break
+      }
+      await sleep(100)
+    }
+  }
 }

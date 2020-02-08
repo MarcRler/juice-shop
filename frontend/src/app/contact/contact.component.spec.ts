@@ -17,9 +17,9 @@ import { of, throwError } from 'rxjs'
 describe('ContactComponent', () => {
   let component: ContactComponent
   let fixture: ComponentFixture<ContactComponent>
-  let userService
-  let feedbackService
-  let captchaService
+  let userService: any
+  let feedbackService: any
+  let captchaService: any
 
   beforeEach(async(() => {
 
@@ -164,7 +164,7 @@ describe('ContactComponent', () => {
     spyOn(component,'resetForm')
     spyOn(component,'ngOnInit')
     component.save()
-    expect(component.confirmation).toBe('Thank you for your feedback.')
+    expect(component.confirmation).toBe('FEEDBACK_THANK_YOU')
     expect(component.ngOnInit).toHaveBeenCalled()
     expect(component.resetForm).toHaveBeenCalled()
   })
@@ -174,18 +174,18 @@ describe('ContactComponent', () => {
     spyOn(component,'resetForm')
     spyOn(component,'ngOnInit')
     component.save()
-    expect(component.confirmation).toBe('Thank you for your feedback and your 5-star rating!')
+    expect(component.confirmation).toBe('FEEDBACK_FIVE_STAR_THANK_YOU')
     expect(component.ngOnInit).toHaveBeenCalled()
     expect(component.resetForm).toHaveBeenCalled()
   })
 
   it('should clear the form display error if saving feedback fails', fakeAsync(() => {
     feedbackService.save.and.returnValue(throwError({ error: 'Error' }))
-    spyOn(component,'resetForm')
+    spyOn(component,'resetCaptcha')
     component.save()
     expect(component.confirmation).toBeNull()
     expect(component.error).toBe('Error')
-    expect(component.resetForm).toHaveBeenCalled()
+    expect(component.resetCaptcha).toHaveBeenCalled()
   }))
 
   it('should clear the feedback object if saving feedback fails', fakeAsync(() => {

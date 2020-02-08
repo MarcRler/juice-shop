@@ -13,7 +13,7 @@ export class ProductReviewService {
 
   constructor (private http: HttpClient) { }
 
-  get (id) {
+  get (id: number) {
     return this.http.get(this.host + '/' + id + '/reviews').pipe(
       map((response: any) => response.data), catchError(err => {
         throw err
@@ -21,17 +21,17 @@ export class ProductReviewService {
     )
   }
 
-  create (id, review) {
+  create (id: number, review: { message: string, author: string }) {
     return this.http.put(this.host + '/' + id + '/reviews', review).pipe(map((response: any) => response.data),
      catchError((err) => { throw err })
     )
   }
 
-  patch (review) {
+  patch (review: { id: string, message: string }) {
     return this.http.patch(this.host + '/reviews', review).pipe(map((response: any) => response.data), catchError((err) => { throw err }))
   }
 
-  like (_id) {
+  like (_id?: string) {
     return this.http.post(this.host + '/reviews', { id: _id }).pipe(map((response: any) => response.data), catchError((err) => { throw err }))
   }
 

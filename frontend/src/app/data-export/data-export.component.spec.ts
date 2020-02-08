@@ -1,24 +1,27 @@
-import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing'
+import { async, ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing'
 import { DataExportComponent } from './data-export.component'
-import { TranslateService, TranslateModule } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { ImageCaptchaService } from '../Services/image-captcha.service'
-import { MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatRadioModule } from '@angular/material'
+import { MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatRadioModule } from '@angular/material'
 import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { ReactiveFormsModule } from '@angular/forms'
 import { of, throwError } from 'rxjs'
 import { DomSanitizer } from '@angular/platform-browser'
 import { SecurityContext } from '@angular/core'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { DataSubjectService } from '../Services/data-subject.service'
 
 describe('DataExportComponent', () => {
   let component: DataExportComponent
   let fixture: ComponentFixture<DataExportComponent>
-  let imageCaptchaService
+  let imageCaptchaService: any
+  let dataSubjectService: any
   let domSanitizer: DomSanitizer
 
   beforeEach(async(() => {
-    imageCaptchaService = jasmine.createSpyObj('ImageCaptchaService', ['getCaptcha', 'dataExport'])
+    imageCaptchaService = jasmine.createSpyObj('ImageCaptchaService', ['getCaptcha'])
     imageCaptchaService.getCaptcha.and.returnValue(of({}))
+    dataSubjectService = jasmine.createSpyObj('DataSubjectService', ['dataExport'])
 
     TestBed.configureTestingModule({
       declarations: [DataExportComponent],
@@ -35,6 +38,7 @@ describe('DataExportComponent', () => {
       ],
       providers: [
         { provide: ImageCaptchaService, useValue: imageCaptchaService },
+        { provide: DataSubjectService, useValue: dataSubjectService },
         TranslateService
       ]
     }).compileComponents()
@@ -71,7 +75,7 @@ describe('DataExportComponent', () => {
   it('should be compulsory to answer the captcha when captcha is present', () => {
     component.captchaControl.setValue('')
     expect(component.captchaControl.valid).toBeFalsy()
-    component.captchaControl.setValue('1')
+    component.captchaControl.setValue('12345')
     expect(component.captchaControl.valid).toBe(true)
   })
 
@@ -83,7 +87,7 @@ describe('DataExportComponent', () => {
   })
 
   it('should show the confirmation and fetch user data and reset data export form on requesting data export', () => {
-    imageCaptchaService.dataExport.and.returnValue(of({ confirmation: 'Data being exported', userData: '{ user data }' }))
+    dataSubjectService.dataExport.and.returnValue(of({ confirmation: 'Data being exported', userData: '{ user data }' }))
     spyOn(component,'resetForm')
     spyOn(component,'ngOnInit')
     component.save()
@@ -95,11 +99,11 @@ describe('DataExportComponent', () => {
   })
 
   it('should clear the form and display error if exporting data fails', fakeAsync(() => {
-    imageCaptchaService.dataExport.and.returnValue(throwError({ error: 'Error' }))
-    spyOn(component,'resetForm')
+    dataSubjectService.dataExport.and.returnValue(throwError({ error: 'Error' }))
+    spyOn(component,'resetFormError')
     component.save()
     expect(component.confirmation).toBeNull()
     expect(component.error).toBe('Error')
-    expect(component.resetForm).toHaveBeenCalled()
+    expect(component.resetFormError).toHaveBeenCalled()
   }))
 })

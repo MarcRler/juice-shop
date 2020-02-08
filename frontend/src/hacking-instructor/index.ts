@@ -1,16 +1,15 @@
-import snarkdown from 'snarkdown'
+// @ts-ignore
+import snarkdown from 'snarkdown' // TODO Remove ts-ignore when https://github.com/developit/snarkdown/pull/74 is merged
 
 import { LoginAdminInstruction } from './challenges/loginAdmin'
-import { XssTier1Instruction } from './challenges/xssTier1'
+import { DomXssInstruction } from './challenges/localXss'
+import { ScoreBoardInstruction } from './challenges/scoreBoard'
 
 const challengeInstructions: ChallengeInstruction[] = [
+  ScoreBoardInstruction,
   LoginAdminInstruction,
-  XssTier1Instruction
+  DomXssInstruction
 ]
-
-export interface HackingInstructorFileFormat {
-  challenges: ChallengeInstruction[]
-}
 
 export interface ChallengeInstruction {
   name: string
@@ -24,29 +23,32 @@ export interface ChallengeHint {
    */
   text: string
   /**
-   * Query Selector String of the Element the Hint should be displayed next to.
+   * Query Selector String of the Element the hint should be displayed next to.
    */
   fixture: string
-  resolved: () => Promise<void>
   /**
    * Set to true if the hint should not be able to be skipped by clicking on it.
    * Defaults to false
    */
   unskippable?: boolean
+  /**
+   * Function declaring the condition under which the tutorial will continue.
+   */
+  resolved: () => Promise<void>
 }
 
 function loadHint (hint: ChallengeHint): HTMLElement {
   const target = document.querySelector(hint.fixture)
 
   if (!target) {
-    return null
+    return null as unknown as HTMLElement
   }
 
   const elem = document.createElement('div')
   elem.id = 'hacking-instructor'
   elem.style.position = 'absolute'
   elem.style.zIndex = '20000'
-  elem.style.backgroundColor = '#4472C4' // TODO Load color from Angular theme <or> use navColor from themes.js?
+  elem.style.backgroundColor = 'rgba(50, 115, 220, 0.9)'
   elem.style.maxWidth = '400px'
   elem.style.minWidth = hint.text.length > 100 ? '350px' : '250px'
   elem.style.padding = '16px'
@@ -67,7 +69,7 @@ function loadHint (hint: ChallengeHint): HTMLElement {
   picture.style.width = '64px'
   picture.style.height = '64px'
   picture.style.marginRight = '8px'
-  picture.src = '/assets/public/images/juice_bot.png'
+  picture.src = '/assets/public/images/hackingInstructor.png'
 
   const textBox = document.createElement('span')
   textBox.style.flexGrow = '2'
@@ -81,7 +83,7 @@ function loadHint (hint: ChallengeHint): HTMLElement {
   relAnchor.style.display = 'inline'
   relAnchor.appendChild(elem)
 
-  target.parentElement.insertBefore(relAnchor, target)
+  target.parentElement!.insertBefore(relAnchor, target)
 
   return relAnchor
 }
@@ -99,9 +101,9 @@ export function hasInstructions (challengeName: String): boolean {
 export async function startHackingInstructorFor (challengeName: String): Promise<void> {
   const challengeInstruction = challengeInstructions.find(({ name }) => name === challengeName)
 
-  for (const hint of challengeInstruction.hints) {
+  for (const hint of challengeInstruction!.hints) {
     const element = loadHint(hint)
-    if (element === null) {
+    if (!element) {
       console.warn(`Could not find Element with fixture "${hint.fixture}"`)
       continue
     }

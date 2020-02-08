@@ -21,7 +21,7 @@ module.exports = function login () {
 
   return (req, res, next) => {
     verifyPreLoginChallenges(req)
-    models.sequelize.query('SELECT * FROM Users WHERE email = \'' + (req.body.email || '') + '\' AND password = \'' + insecurity.hash(req.body.password || '') + '\' AND deletedAt IS NULL', { model: models.User, plain: true })
+    models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '${insecurity.hash(req.body.password || '')}' AND deletedAt IS NULL`, { model: models.User, plain: true })
       .then((authenticatedUser) => {
         let user = utils.queryResultToJson(authenticatedUser)
         const rememberedEmail = insecurity.userEmailFrom(req)
@@ -69,7 +69,7 @@ module.exports = function login () {
     if (utils.notSolved(challenges.dlpPasswordSprayingChallenge) && req.body.email === 'J12934@' + config.get('application.domain') && req.body.password === '0Y8rMnww$*9VFYE§59-!Fg1L6t&6lB') {
       utils.solve(challenges.dlpPasswordSprayingChallenge)
     }
-    if (utils.notSolved(challenges.oauthUserPasswordChallenge) && req.body.email === 'bjoern.kimminich@googlemail.com' && req.body.password === 'bW9jLmxpYW1lbGdvb2dAaGNpbmltbWlrLm5yZW9qYg==') {
+    if (utils.notSolved(challenges.oauthUserPasswordChallenge) && req.body.email === 'bjoern.kimminich@gmail.com' && req.body.password === 'bW9jLmxpYW1nQGhjaW5pbW1pay5ucmVvamI=') {
       utils.solve(challenges.oauthUserPasswordChallenge)
     }
   }
@@ -83,6 +83,12 @@ module.exports = function login () {
       utils.solve(challenges.loginBenderChallenge)
     } else if (utils.notSolved(challenges.ghostLoginChallenge) && user.data.id === users.chris.id) {
       utils.solve(challenges.ghostLoginChallenge)
+    } else if (utils.notSolved(challenges.ephemeralAccountantChallenge) && user.data.email === 'acc0unt4nt@' + config.get('application.domain') && user.data.role === 'accounting') {
+      models.User.count({ where: { email: 'acc0unt4nt@' + config.get('application.domain') } }).then(count => {
+        if (count === 0) {
+          utils.solve(challenges.ephemeralAccountantChallenge)
+        }
+      })
     }
   }
 }

@@ -4,7 +4,6 @@
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/bkimminich/juice-shop.svg)](https://cloud.docker.com/repository/docker/bkimminich/juice-shop/builds)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/2a7af720d39b08a09904/test_coverage)](https://codeclimate.com/github/bkimminich/juice-shop/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2a7af720d39b08a09904/maintainability)](https://codeclimate.com/github/bkimminich/juice-shop/maintainability)
-[![Greenkeeper badge](https://badges.greenkeeper.io/bkimminich/juice-shop-ctf.svg)](https://greenkeeper.io/)
 ![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/bkimminich/juice-shop.svg)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/owasp-juice-shop/localized.svg)](https://crowdin.com/project/owasp-juice-shop)
 [![Bountysource Activity](https://img.shields.io/bountysource/team/juice-shop/activity.svg)](https://www.bountysource.com/teams/juice-shop)
@@ -23,6 +22,10 @@ The minimum requirements for code contributions are:
 3. New and changed challenges _must_ have a corresponding e2e test.
 4. Linting, as well as all unit, integration and e2e tests _should_ pass
    locally before opening a Pull Request.
+5. All Git commits within a PR must be
+   [signed off](https://git-scm.com/docs/git-commit#Documentation/git-commit.txt--s)
+   to indicate the contributor's agreement with the
+   [Developer Certificate of Origin](https://developercertificate.org/).
 
 ### Contribution Guidelines
 
